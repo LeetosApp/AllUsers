@@ -8,28 +8,31 @@
     <script type="module">
         import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
         const octokit = new Octokit({
-            auth: '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'
+            auth: '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'
         })
 
-await fetch('https://api.github.com/repos/LeetosApp/AllUsers/contents/users.json').then(response => response.json()).then(data => {   
-    octokit.request('PUT /repos/LeetosApp/AllUsers/contents/{path}', {
-    owner: 'LeetosApp',
-    repo: 'AllUsers',
-    path: 'users.json',
-    message: 'a new commit message',
-    committer: {
-        name: 'LeetosApp',
-        email: 'LeetosApp'
-    },
-  content: btoa('{"newUsser":4}'),
-  sha: data.sha
-})
-
-})
-    let queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    console.log(urlParams.get('username'));
-    console.log(urlParams.get('index'));
+        let queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        let username = urlParams.get('username');
+        let index = urlParams.get('index');
+        await fetch('https://api.github.com/repos/LeetosApp/AllUsers/contents/users.json')
+            .then(response => response.json())
+            .then(data => {
+                // let ll = (JSON.stringify(data));
+                let ll = (atob(data.content).slice(0, -2) + `,"${username}":${index}}`);
+                octokit.request('PUT /repos/LeetosApp/AllUsers/contents/{path}', {
+                    owner: 'LeetosApp',
+                    repo: 'AllUsers',
+                    path: 'users.json',
+                    message: 'a new commit message',
+                    committer: {
+                        name: 'LeetosApp',
+                        email: 'LeetosApp'
+                    },
+                    content: btoa(ll),
+                    sha: data.sha
+                })
+        })
     </script>
 </head>
 <body>
