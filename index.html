@@ -20,6 +20,7 @@
             .then(data => {
                 // let ll = (JSON.stringify(data));
                 let ll = (atob(data.content).slice(0, -2) + `,"${username}":${index}}`);
+                console.log(ll);
                 octokit.request('PUT /repos/LeetosApp/AllUsers/contents/{path}', {
                     owner: 'LeetosApp',
                     repo: 'AllUsers',
@@ -37,7 +38,7 @@
 </head>
 <body>
     <h1>
-        This is a SignUp app for Leetos
+        Test II
     </h1>
 </body>
 </html>
